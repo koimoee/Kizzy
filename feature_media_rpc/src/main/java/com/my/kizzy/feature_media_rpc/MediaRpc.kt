@@ -44,6 +44,7 @@ import com.my.kizzy.preference.Prefs.MEDIA_RPC_ALBUM_NAME
 import com.my.kizzy.preference.Prefs.MEDIA_RPC_ENABLE_TIMESTAMPS
 import com.my.kizzy.preference.Prefs.MEDIA_RPC_HIDE_ON_PAUSE
 import com.my.kizzy.preference.Prefs.MEDIA_RPC_SHOW_PLAYBACK_STATE
+import com.my.kizzy.preference.Prefs.MEDIA_RPC_ARTIST_ON_NAME
 import com.my.kizzy.resources.R
 import com.my.kizzy.ui.components.BackButton
 import com.my.kizzy.ui.components.SwitchBar
@@ -60,6 +61,7 @@ fun MediaRPC(onBackPressed: () -> Unit) {
     var isAppIconEnabled by remember { mutableStateOf(Prefs[MEDIA_RPC_APP_ICON, false]) }
     var isTimestampsEnabled by remember { mutableStateOf(Prefs[MEDIA_RPC_ENABLE_TIMESTAMPS, false]) }
     var hideOnPause by remember { mutableStateOf(Prefs[MEDIA_RPC_HIDE_ON_PAUSE, false]) }
+    var showArtistonName by remember { mutableStateOf(Prefs[MEDIA_RPC_ARTIST_ON_NAME, false]) }
     var isShowPlaybackState by remember { mutableStateOf(Prefs[MEDIA_RPC_SHOW_PLAYBACK_STATE, false]) }
     var hasNotificationAccess by remember { mutableStateOf(context.hasNotificationAccess()) }
     Scaffold(
@@ -167,6 +169,16 @@ fun MediaRPC(onBackPressed: () -> Unit) {
                     ) {
                         hideOnPause = !hideOnPause
                         Prefs[MEDIA_RPC_HIDE_ON_PAUSE] = hideOnPause
+                    }
+                }
+                item {
+                    PreferenceSwitch(
+                        title = "Artist Name Instead App Name",
+                        icon = Icons.Default.Apps,
+                        isChecked = ShowArtistOnName,
+                    ) {
+                        ShowArtistOnName = !ShowArtistOnName
+                        Prefs[MEDIA_RPC_ARTIST_ON_NAME] = ShowArtistOnName
                     }
                 }
             }
