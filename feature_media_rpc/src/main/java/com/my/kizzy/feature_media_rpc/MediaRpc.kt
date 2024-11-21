@@ -61,7 +61,7 @@ fun MediaRPC(onBackPressed: () -> Unit) {
     var isAppIconEnabled by remember { mutableStateOf(Prefs[MEDIA_RPC_APP_ICON, false]) }
     var isTimestampsEnabled by remember { mutableStateOf(Prefs[MEDIA_RPC_ENABLE_TIMESTAMPS, false]) }
     var hideOnPause by remember { mutableStateOf(Prefs[MEDIA_RPC_HIDE_ON_PAUSE, false]) }
-    var showArtistonName by remember { mutableStateOf(Prefs[MEDIA_RPC_ARTIST_ON_NAME, false]) }
+    var ShowArtistOnName by remember { mutableStateOf(Prefs[MEDIA_RPC_ARTIST_ON_NAME, false]) }
     var isShowPlaybackState by remember { mutableStateOf(Prefs[MEDIA_RPC_SHOW_PLAYBACK_STATE, false]) }
     var hasNotificationAccess by remember { mutableStateOf(context.hasNotificationAccess()) }
     Scaffold(
