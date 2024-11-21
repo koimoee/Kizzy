@@ -173,7 +173,7 @@ fun MediaRPC(onBackPressed: () -> Unit) {
                 }
                 item {
                     PreferenceSwitch(
-                        title = "Artist Name Instead App Name",
+                        title = stringResource(id = R.string.show_artist_on_name),
                         icon = Icons.Default.Apps,
                         isChecked = ShowArtistOnName,
                     ) {
