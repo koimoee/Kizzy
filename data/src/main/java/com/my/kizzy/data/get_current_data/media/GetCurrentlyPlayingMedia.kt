@@ -67,7 +67,10 @@ class GetCurrentPlayingMedia @Inject constructor(
 
             val metadata = mediaController.metadata
             val title = metadata?.getString(MediaMetadata.METADATA_KEY_TITLE)
-            val appName = AppUtils.getAppName(mediaController.packageName)
+            val appName =
+                if (Prefs[Prefs.MEDIA_RPC_ARTIST_ON_NAME, false])
+                metadata?.let { metadataResolver.getArtistOrAuthor(it) }
+                else AppUtils.getAppName(mediaController.packageName)
             val author =
                 if (Prefs[Prefs.MEDIA_RPC_ARTIST_NAME, false])
                 metadata?.let { metadataResolver.getArtistOrAuthor(it) }
