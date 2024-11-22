@@ -123,6 +123,10 @@ fun MediaRPC(onBackPressed: () -> Unit) {
                     ) {
                         isArtistEnabled = !isArtistEnabled
                         Prefs[MEDIA_RPC_ARTIST_NAME] = isArtistEnabled
+                        if (!isArtistEnabled) {
+                            ShowArtistOnName = false
+                            Prefs[MEDIA_RPC_ARTIST_ON_NAME] = ShowArtistOnName
+                        }
                     }
                 }
                 item {
@@ -180,6 +184,7 @@ fun MediaRPC(onBackPressed: () -> Unit) {
                         title = stringResource(id = R.string.show_artist_on_name),
                         icon = Icons.Default.Sync,
                         isChecked = ShowArtistOnName,
+                        enabled = isArtistEnabled,
                     ) {
                         ShowArtistOnName = !ShowArtistOnName
                         Prefs[MEDIA_RPC_ARTIST_ON_NAME] = ShowArtistOnName
