@@ -28,7 +28,7 @@ import androidx.compose.material.icons.filled.PlayCircle
 import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.filled.Sync
-import androidx.compose.material.icons.filled.ArtTrack
+import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -121,10 +121,6 @@ fun MediaRPC(onBackPressed: () -> Unit) {
                     ) {
                         isArtistEnabled = !isArtistEnabled
                         Prefs[Prefs.MEDIA_RPC_ARTIST_NAME] = isArtistEnabled
-                        if (!isArtistEnabled) {
-                            ShowArtistOnName = false
-                            Prefs[Prefs.MEDIA_RPC_ARTIST_ON_NAME] = ShowArtistOnName
-                        }
                     }
                 }
                 item {
@@ -132,7 +128,6 @@ fun MediaRPC(onBackPressed: () -> Unit) {
                         title = stringResource(id = R.string.show_artist_on_name),
                         icon = Icons.Default.Sync,
                         isChecked = ShowArtistOnName,
-                        enabled = isArtistEnabled
                     ) {
                         ShowArtistOnName = !ShowArtistOnName
                         Prefs[Prefs.MEDIA_RPC_ARTIST_ON_NAME] = ShowArtistOnName
@@ -191,7 +186,7 @@ fun MediaRPC(onBackPressed: () -> Unit) {
                 item {
                     PreferenceSwitch(
                         title = stringResource(id = R.string.show_album_art),
-                        icon = Icons.Default.ArtTrack,
+                        icon = Icons.Default.AutoAwesome,
                         isChecked = ShowAlbumArt,
                     ) {
                         ShowAlbumArt = !ShowAlbumArt
