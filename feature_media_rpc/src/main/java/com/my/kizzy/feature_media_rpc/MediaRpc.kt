@@ -1,3 +1,15 @@
+/*
+ *
+ *  ******************************************************************
+ *  *  * Copyright (C) 2022
+ *  *  * MediaRpc.kt is part of Kizzy
+ *  *  *  and can not be copied and/or distributed without the express
+ *  *  * permission of yzziK(Vaibhav)
+ *  *  *****************************************************************
+ *
+ *
+ */
+
 package com.my.kizzy.feature_media_rpc
 
 import android.content.Intent
@@ -8,15 +20,34 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.Apps
+import androidx.compose.material.icons.filled.Audiotrack
+import androidx.compose.material.icons.filled.Album
+import androidx.compose.material.icons.filled.PauseCircle
+import androidx.compose.material.icons.filled.PlayCircle
+import androidx.compose.material.icons.filled.Timer
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.filled.Sync
+import androidx.compose.material.icons.filled.ArtTrack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.my.kizzy.feature_rpc_base.AppUtils
-import com.my.kizzy.feature_rpc_base.services.*
+import com.my.kizzy.feature_rpc_base.services.AppDetectionService
+import com.my.kizzy.feature_rpc_base.services.CustomRpcService
+import com.my.kizzy.feature_rpc_base.services.ExperimentalRpc
+import com.my.kizzy.feature_rpc_base.services.MediaRpcService
 import com.my.kizzy.preference.Prefs
+import com.my.kizzy.preference.Prefs.MEDIA_RPC_APP_ICON
+import com.my.kizzy.preference.Prefs.MEDIA_RPC_ARTIST_NAME
+import com.my.kizzy.preference.Prefs.MEDIA_RPC_ALBUM_NAME
+import com.my.kizzy.preference.Prefs.MEDIA_RPC_ENABLE_TIMESTAMPS
+import com.my.kizzy.preference.Prefs.MEDIA_RPC_HIDE_ON_PAUSE
+import com.my.kizzy.preference.Prefs.MEDIA_RPC_SHOW_PLAYBACK_STATE
+import com.my.kizzy.preference.Prefs.MEDIA_RPC_ARTIST_ON_NAME
+import com.my.kizzy.preference.Prefs.MEDIA_RPC_SHOW_ALBUM_ART
 import com.my.kizzy.resources.R
 import com.my.kizzy.ui.components.BackButton
 import com.my.kizzy.ui.components.SwitchBar
