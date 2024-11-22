@@ -93,16 +93,17 @@ class GetCurrentPlayingMedia @Inject constructor(
                     if (Prefs[Prefs.MEDIA_RPC_APP_ICON, false]) RpcImage.ApplicationIcon(
                         mediaController.packageName, context
                     ) else null
-                if (bitmap != null) {
-                    smallIcon = largeIcon
-                    smallText = appName
-                    largeIcon = RpcImage.BitmapImage(
-                        context = context,
-                        bitmap = bitmap,
-                        packageName = mediaController.packageName,
-                        // <Main artist>|<Album or Title>
-                        title = "${metadata.let { metadataResolver.getAlbumArtists(it) }}|${metadata.let { metadataResolver.getAlbum(it) } ?: title}"
-                    )
+                if (Prefs[Prefs.MEDIA_RPC_SHOW_ALBUM_ART, false]) {
+                    if (bitmap != null) {
+                        smallIcon = largeIcon
+                        smallText = appName
+                        largeIcon = RpcImage.BitmapImage(
+                            context = context,
+                            bitmap = bitmap,
+                            packageName = mediaController.packageName,
+                            title = "${metadata.let { metadataResolver.getAlbumArtists(it) }}|${metadata.let { metadataResolver.getAlbum(it) } ?: title}"
+                        )
+                    }
                 }
 
                 if (Prefs[Prefs.MEDIA_RPC_SHOW_PLAYBACK_STATE, false]) {
