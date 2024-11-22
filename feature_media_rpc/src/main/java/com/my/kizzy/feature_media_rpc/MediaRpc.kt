@@ -27,6 +27,8 @@ import androidx.compose.material.icons.filled.PauseCircle
 import androidx.compose.material.icons.filled.PlayCircle
 import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.filled.Sync
+import androidx.compose.material.icons.filled.ArtTrack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -45,6 +47,7 @@ import com.my.kizzy.preference.Prefs.MEDIA_RPC_ENABLE_TIMESTAMPS
 import com.my.kizzy.preference.Prefs.MEDIA_RPC_HIDE_ON_PAUSE
 import com.my.kizzy.preference.Prefs.MEDIA_RPC_SHOW_PLAYBACK_STATE
 import com.my.kizzy.preference.Prefs.MEDIA_RPC_ARTIST_ON_NAME
+import com.my.kizzy.preference.Prefs.MEDIA_RPC_SHOW_ALBUM_ART
 import com.my.kizzy.resources.R
 import com.my.kizzy.ui.components.BackButton
 import com.my.kizzy.ui.components.SwitchBar
@@ -62,6 +65,7 @@ fun MediaRPC(onBackPressed: () -> Unit) {
     var isTimestampsEnabled by remember { mutableStateOf(Prefs[MEDIA_RPC_ENABLE_TIMESTAMPS, false]) }
     var hideOnPause by remember { mutableStateOf(Prefs[MEDIA_RPC_HIDE_ON_PAUSE, false]) }
     var ShowArtistOnName by remember { mutableStateOf(Prefs[MEDIA_RPC_ARTIST_ON_NAME, false]) }
+    var ShowAlbumArt by remember { mutableStateOf(Prefs[MEDIA_RPC_SHOW_ALBUM_ART, false]) }
     var isShowPlaybackState by remember { mutableStateOf(Prefs[MEDIA_RPC_SHOW_PLAYBACK_STATE, false]) }
     var hasNotificationAccess by remember { mutableStateOf(context.hasNotificationAccess()) }
     Scaffold(
@@ -174,11 +178,21 @@ fun MediaRPC(onBackPressed: () -> Unit) {
                 item {
                     PreferenceSwitch(
                         title = stringResource(id = R.string.show_artist_on_name),
-                        icon = Icons.Default.Apps,
+                        icon = Icons.Default.Sync,
                         isChecked = ShowArtistOnName,
                     ) {
                         ShowArtistOnName = !ShowArtistOnName
                         Prefs[MEDIA_RPC_ARTIST_ON_NAME] = ShowArtistOnName
+                    }
+                }
+                item {
+                    PreferenceSwitch(
+                        title = stringResource(id = R.string.show_album_art),
+                        icon = Icons.Default.ArtTrack,
+                        isChecked = ShowAlbumArt,
+                    ) {
+                        ShowAlbumArt = !ShowAlbumArt
+                        Prefs[MEDIA_RPC_SHOW_ALBUM_ART] = ShowAlbumArt
                     }
                 }
             }
