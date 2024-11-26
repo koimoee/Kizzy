@@ -71,6 +71,9 @@
     <string name="rpc_settings_button_configs">Button configuration for Media and AppDetection RPC</string>
     <string name="use_custom_buttons">Use Custom Buttons</string>
     <string name="use_custom_buttons_desc">Use Predefined buttons to show on Media and AppDetection RPC</string>
+    <string name="layout_mode_sub">Layout</string>
+    <string name="layout_mode_title">Use List View Layout</string>
+    <string name="layout_mode_desc">Use List-View Layout Instead Grid-Layout</string>
     <string name="follow_system">Follow System</string>
     <string name="advance_settings">Advanced Settings</string>
     <string name="amoled">AMOLED Theme</string>
