@@ -1,6 +1,7 @@
 package kizzy.gateway.entities
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import com.my.kizzy.preference.Prefs
 
 @Serializable
 data class Identify(
@@ -21,7 +22,7 @@ data class Identify(
             compress = false,
             largeThreshold = 100,
             properties = Properties(
-                browser = "Discord Client",
+                browser = Prefs[Prefs.WEBSOCKET_CONFIG, "Discord Client"],
                 device = "ktor",
                 os = "Windows"
             ),
