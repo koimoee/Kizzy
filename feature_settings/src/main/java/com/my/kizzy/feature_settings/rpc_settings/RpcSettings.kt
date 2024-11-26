@@ -32,6 +32,7 @@ import androidx.compose.material.icons.filled.DoNotDisturbOn
 import androidx.compose.material.icons.filled.HighQuality
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.Devices
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Pin
 import androidx.compose.material.icons.filled.SmartButton
@@ -170,6 +171,15 @@ fun RpcSettings(onBackPressed: () -> Boolean) {
                     icon = Icons.Default.DoNotDisturbOn
                 ) {
                     showActivityStatusDialog = true
+                }
+            }
+            item {
+                SettingItem(
+                    title = stringResource(id = R.string.websocket_config),
+                    description = stringResource(id = R.string.websocket_config_desc),
+                    icon = Icons.Default.Devices
+                ) {
+                    showWebsocketDialog = true
                 }
             }
             item {
@@ -419,6 +429,33 @@ fun RpcSettings(onBackPressed: () -> Boolean) {
                                 customActivityStatus = value
                                 Prefs[Prefs.CUSTOM_ACTIVITY_STATUS] = value
                                 showActivityStatusDialog = false
+                            }
+                        }
+                    }
+                }
+            )
+        }
+
+        if (showWebsocketDialog) {
+            AlertDialog(
+                onDismissRequest = {
+                    showWebsocketDialog = false
+                },
+                confirmButton = {},
+                text = {
+                    val statusMap = mapOf(
+                        stringResource(R.string.status_online) to "desktop",
+                        stringResource(R.string.status_idle) to "mobile",
+                    )
+                    Column {
+                        statusMap.forEach { (key, value) ->
+                            SingleChoiceItem(
+                                text = key,
+                                selected = value == websocketConfig
+                            ) {
+                                websocketConfig = value
+                                Prefs[Prefs.WEBSOCKET_CONFIG] = value
+                                showWebsocketDialog = false
                             }
                         }
                     }
