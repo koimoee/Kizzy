@@ -124,6 +124,7 @@ object Prefs {
     const val RPC_BUTTONS_DATA = "saved_rpc_buttons_data"
     const val RPC_USE_LOW_RES_ICON = "use_low_res_app_icons"
     const val CONFIGS_DIRECTORY = "configs_directory"
+    const val WEBSOCKET_CONFIG = "websocket_config"
     const val USE_IMGUR = "use_imgur"
     // Saved Image Asset ids
     const val SAVED_IMAGES = "saved_images"
