@@ -39,6 +39,8 @@
     <string name="text_after_permission_denied">Storage access is important for this app to store configs in public directories. Please grant the permission.</string>
     <string name="request_for_storage_access">Storage permission required for config features to work. Please grant the permission.</string>
     <string name="grant_permission">Grant Permission</string>
+    <string name="websocket_config">Websocket</string>
+    <string name="websocket_config_desc">Custom Devices Websocket</string>
     <string name="use_low_res_icon">Use Low Resolution Images</string>
     <string name="use_low_res_icon_desc">Use a lower resolution app icon for displaying on RPC (turn this on if the RPC is crashing). This setting will also be applied to Apps.</string>
     <string name="delete_saved_icon_urls">Delete Saved Icon Links</string>
