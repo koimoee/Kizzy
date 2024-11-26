@@ -444,8 +444,8 @@ fun RpcSettings(onBackPressed: () -> Boolean) {
                 confirmButton = {},
                 text = {
                     val statusMap = mapOf(
-                        stringResource(R.string.status_online) to "desktop",
-                        stringResource(R.string.status_idle) to "mobile",
+                        stringResource(R.string.websocket_discordclient) to "Discord Client",
+                        stringResource(R.string.websocket_discordandroid) to "Discord Android",
                     )
                     Column {
                         statusMap.forEach { (key, value) ->
