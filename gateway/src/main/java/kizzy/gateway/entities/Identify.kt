@@ -3,7 +3,6 @@ package kizzy.gateway.entities
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import com.my.kizzy.preference.Prefs
-import com.my.kizzy.preference.Prefs.WEBSOCKET_CONFIG
 
 @Serializable
 data class Identify(
@@ -19,21 +18,26 @@ data class Identify(
     val token: String
 ) {
     companion object {
-        fun String.toIdentifyPayload() = Identify(
-            capabilities = 65,
-            compress = false,
-            largeThreshold = 100,
-            properties = Properties(
-                browser = when (WEBSOCKET_CONFIG) {
-                    "Discord Client" -> "Discord Client"
-                    "Discord Android" -> "Discord Android"
-                    else -> "Discord Client"
-                },
-                device = "ktor",
-                os = "Windows"
-            ),
-            token = this
-        )
+        fun String.toIdentifyPayload(): Identify {
+            val websocketConfig = Prefs[Prefs.WEBSOCKET_CONFIG, "Unknown"]
+            val browser = when (websocketConfig) {
+                "Discord Client" -> "Discord Client"
+                "Discord Android" -> "Discord Android"
+                else -> "Unknown"
+            }
+
+            return Identify(
+                capabilities = 65,
+                compress = false,
+                largeThreshold = 100,
+                properties = Properties(
+                    browser = browser,
+                    device = "ktor",
+                    os = "Windows"
+                ),
+                token = this
+            )
+        }
     }
 }
 
