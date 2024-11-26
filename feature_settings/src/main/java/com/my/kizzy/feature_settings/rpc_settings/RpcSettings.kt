@@ -90,6 +90,9 @@ fun RpcSettings(onBackPressed: () -> Boolean) {
     var customActivityStatus by remember {
         mutableStateOf(Prefs[Prefs.CUSTOM_ACTIVITY_STATUS, "dnd"])
     }
+    var websocketConfig by remember {
+        mutableStateOf(Prefs[Prefs.WEBSOCKET_CONFIG, "Discord Client"])
+    }
     var customActivityType by remember {
         mutableStateOf(Prefs[Prefs.CUSTOM_ACTIVITY_TYPE, 0].toString())
     }
