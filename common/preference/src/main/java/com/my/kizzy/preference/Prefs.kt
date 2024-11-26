@@ -108,6 +108,7 @@ object Prefs {
     const val LAST_RUN_CUSTOM_RPC = "last_run_custom_rpc"
     const val LANGUAGE = "language"
     const val ENABLED_APPS = "enabled_apps"
+    const val LAYOUT_MODE = "layout_mode"
 
     //Media Rpc Preferences
     const val MEDIA_RPC_ARTIST_NAME = "media_rpc_artist_name"
