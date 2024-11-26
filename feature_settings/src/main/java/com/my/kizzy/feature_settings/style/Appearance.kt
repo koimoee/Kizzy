@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.filled.DashboardCustomize
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -47,6 +48,7 @@ import com.my.kizzy.feature_settings.style.svg.PALETTE
 import com.my.kizzy.preference.DEFAULT_SEED_COLOR
 import com.my.kizzy.preference.Prefs
 import com.my.kizzy.preference.Prefs.CUSTOM_THEME_COLOR
+import com.my.kizzy.preference.Prefs.LAYOUT_MODE
 import com.my.kizzy.preference.modifyThemeSeedColor
 import com.my.kizzy.preference.palettesMap
 import com.my.kizzy.preference.switchDynamicColor
@@ -59,6 +61,7 @@ import com.my.kizzy.ui.theme.LocalDynamicColorSwitch
 import com.my.kizzy.ui.theme.LocalPaletteStyleIndex
 import com.my.kizzy.ui.theme.LocalSeedColor
 import com.my.kizzy.ui.theme.autoDark
+import com.my.kizzy.ui.components.Subtitle
 
 val colorList = listOf(
     Color(DEFAULT_SEED_COLOR),
@@ -76,6 +79,7 @@ val colorList = listOf(
 fun Appearance(
     onBackPressed: () -> Unit, navigateToDarkTheme: () -> Unit
 ) {
+    var layoutMode by remember { mutableStateOf(Prefs[Prefs.LAYOUT_MODE, false]) }
 
     Scaffold(topBar = {
         LargeTopAppBar(title = {
@@ -158,6 +162,22 @@ fun Appearance(
                 description = LocalDarkTheme.current.getDarkThemeDesc(),
                 icon = Icons.Outlined.DarkMode,
             ) { navigateToDarkTheme() }
+
+             item {
+                Subtitle(text = stringResource(id = R.string.layout_mode_sub))
+            }
+
+            item {
+                PreferenceSwitch(
+                    title = stringResource(id = R.string.layout_mode_title),
+                    description = stringResource(id = R.string.layout_mode_desc),
+                    icon = Icons.Default.DashboardCustomize,
+                    isChecked = layoutMode
+                ) {
+                    layoutMode = !layoutMode
+                    Prefs[Prefs.LAYOUT_MODE] = layoutMode
+                }
+            }
         }
     }
 }
