@@ -117,7 +117,6 @@ object Prefs {
     const val MEDIA_RPC_ENABLE_TIMESTAMPS = "enable_timestamps"
     const val MEDIA_RPC_HIDE_ON_PAUSE = "hide_on_pause"
     const val MEDIA_RPC_SHOW_PLAYBACK_STATE = "show_playback_state"
-    const val MEDIA_RPC_ARTIST_ON_NAME = "show_artist_on_name"
     const val MEDIA_RPC_SHOW_ALBUM_ART = "show_album_art"
     const val SWAP = "swap_config"
 
