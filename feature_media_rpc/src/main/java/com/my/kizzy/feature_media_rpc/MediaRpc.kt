@@ -46,7 +46,6 @@ import com.my.kizzy.preference.Prefs.MEDIA_RPC_ALBUM_NAME
 import com.my.kizzy.preference.Prefs.MEDIA_RPC_ENABLE_TIMESTAMPS
 import com.my.kizzy.preference.Prefs.MEDIA_RPC_HIDE_ON_PAUSE
 import com.my.kizzy.preference.Prefs.MEDIA_RPC_SHOW_PLAYBACK_STATE
-import com.my.kizzy.preference.Prefs.MEDIA_RPC_ARTIST_ON_NAME
 import com.my.kizzy.preference.Prefs.MEDIA_RPC_SHOW_ALBUM_ART
 import com.my.kizzy.preference.Prefs.SWAP
 import com.my.kizzy.resources.R
@@ -67,7 +66,6 @@ fun MediaRPC(onBackPressed: () -> Unit) {
     var isAppIconEnabled by remember { mutableStateOf(Prefs[Prefs.MEDIA_RPC_APP_ICON, false]) }
     var isTimestampsEnabled by remember { mutableStateOf(Prefs[Prefs.MEDIA_RPC_ENABLE_TIMESTAMPS, false]) }
     var hideOnPause by remember { mutableStateOf(Prefs[Prefs.MEDIA_RPC_HIDE_ON_PAUSE, false]) }
-    var ShowArtistOnName by remember { mutableStateOf(Prefs[Prefs.MEDIA_RPC_ARTIST_ON_NAME, false]) }
     var ShowAlbumArt by remember { mutableStateOf(Prefs[Prefs.MEDIA_RPC_SHOW_ALBUM_ART, false]) }
     var isShowPlaybackState by remember { mutableStateOf(Prefs[Prefs.MEDIA_RPC_SHOW_PLAYBACK_STATE, false]) }
     var hasNotificationAccess by remember { mutableStateOf(context.hasNotificationAccess()) }
@@ -130,16 +128,6 @@ fun MediaRPC(onBackPressed: () -> Unit) {
                     ) {
                         isArtistEnabled = !isArtistEnabled
                         Prefs[Prefs.MEDIA_RPC_ARTIST_NAME] = isArtistEnabled
-                    }
-                }
-                item {
-                    PreferenceSwitch(
-                        title = stringResource(id = R.string.show_artist_on_name),
-                        icon = Icons.Default.Sync,
-                        isChecked = ShowArtistOnName,
-                    ) {
-                        ShowArtistOnName = !ShowArtistOnName
-                        Prefs[Prefs.MEDIA_RPC_ARTIST_ON_NAME] = ShowArtistOnName
                     }
                 }
 
