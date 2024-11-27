@@ -31,6 +31,10 @@
     <string name="credits">Credits</string>
     <string name="credits_desc">Credits to libraries used and contributors</string>
     <string name="enable_artist_name">Enable Artist Name</string>
+    <string name="swap_appname">App Name</string>
+    <string name="swap_songname">Song Name</string>
+    <string name="swap_artistname">Artist Name</string>
+    <string name="swap_albumname">Album Name</string>
     <string name="enable_album_name">Enable Album Name</string>
     <string name="show_artist_on_name">Show Artist Instead App Name</string>
     <string name="show_album_art">Show Album Art</string>
