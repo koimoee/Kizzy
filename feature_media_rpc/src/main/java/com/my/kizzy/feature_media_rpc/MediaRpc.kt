@@ -48,6 +48,7 @@ import com.my.kizzy.preference.Prefs.MEDIA_RPC_HIDE_ON_PAUSE
 import com.my.kizzy.preference.Prefs.MEDIA_RPC_SHOW_PLAYBACK_STATE
 import com.my.kizzy.preference.Prefs.MEDIA_RPC_ARTIST_ON_NAME
 import com.my.kizzy.preference.Prefs.MEDIA_RPC_SHOW_ALBUM_ART
+import com.my.kizzy.preference.Prefs.SWAP
 import com.my.kizzy.resources.R
 import com.my.kizzy.ui.components.BackButton
 import com.my.kizzy.ui.components.SwitchBar
