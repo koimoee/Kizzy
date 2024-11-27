@@ -103,6 +103,9 @@ fun RpcSettings(onBackPressed: () -> Boolean) {
     var showActivityStatusDialog by remember {
         mutableStateOf(false)
     }
+    var showActivityTypeDialog by remember {
+        mutableStateOf(false)
+    }
     var showApplicationIdDialog by remember {
         mutableStateOf(false)
     }
