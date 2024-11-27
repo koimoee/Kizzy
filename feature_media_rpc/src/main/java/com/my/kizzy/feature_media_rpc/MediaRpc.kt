@@ -51,6 +51,7 @@ import com.my.kizzy.preference.Prefs.SWAP
 import com.my.kizzy.resources.R
 import com.my.kizzy.ui.components.BackButton
 import com.my.kizzy.ui.components.SwitchBar
+import com.my.kizzy.ui.components.dialog.SingleChoiceItem
 import com.my.kizzy.ui.components.preference.PreferenceSwitch
 import com.my.kizzy.ui.components.preference.PreferencesHint
 import androidx.compose.material3.AlertDialog
@@ -221,7 +222,7 @@ fun MediaRPC(onBackPressed: () -> Unit) {
                                 text = key,
                                 selected = value == swapConfig
                             ) {
-                                websocketConfig = value
+                                swapConfig = value
                                 Prefs[Prefs.SWAP] = value
                                 showSwapDialog = false
                             }
