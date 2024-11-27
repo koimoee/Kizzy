@@ -36,7 +36,8 @@
     <string name="swap_artistname">Artist Name</string>
     <string name="swap_albumname">Album Name</string>
     <string name="enable_album_name">Enable Album Name</string>
-    <string name="show_artist_on_name">Show Artist Instead App Name</string>
+    <string name="swap_name">Swap Name</string>
+    <string name="swap_name_desc">Replace Name Field With Other Metadata</string>
     <string name="show_album_art">Show Album Art</string>
     <string name="show_app_icon">Show App Icon</string>
     <string name="enable_timestamps">Enable Timestamps</string>
