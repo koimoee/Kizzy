@@ -66,6 +66,8 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.my.kizzy.domain.model.toVersion
+import com.my.kizzy.preference.Prefs
+import com.my.kizzy.preference.Prefs.LAYOUT_MODE
 import com.my.kizzy.domain.model.user.User
 import com.my.kizzy.feature_home.feature.Features
 import com.my.kizzy.feature_home.feature.HomeFeature
@@ -102,6 +104,7 @@ fun Home(
     var showUpdateDialog by remember {
         mutableStateOf(false)
     }
+    val layoutMode by remember { mutableStateOf(Prefs[Prefs.LAYOUT_MODE, false]) }
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val scrollBehavior =
@@ -232,34 +235,32 @@ fun Home(
                 )
             }
         ) { paddingValues ->
-            LazyColumn(
-                modifier = Modifier.padding(paddingValues),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                item {
-                    ChipSection()
-                    Text(
-                        text = stringResource(id = R.string.features),
-                        style = MaterialTheme.typography.headlineMedium,
-                        modifier = Modifier.padding(start = 15.dp)
-                    )
+            if (layoutMode) {
+                // List Layout
+                LazyColumn(
+                    modifier = Modifier.padding(paddingValues),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    items(features.size) { index ->
+                        FeatureItem(feature = features[index])
+                    }
                 }
-                item {
-                    Features(homeItems) {
-                        homeItems = homeItems.mapIndexed { j, item ->
-                            if (it == j) {
-                                item.copy(isChecked = !item.isChecked)
-                            } else {
-                                if (item.isChecked) {
-                                    item.copy(isChecked = false)
-                                } else {
-                                    item
-                                }
-                            }
-                        }
+            } else {
+                // Grid Layout
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    modifier = Modifier.padding(paddingValues),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    items(features.size) { index ->
+                        FeatureItem(feature = features[index])
                     }
                 }
             }
+        }
+    }
+}
             when (state) {
                 is HomeScreenState.LoadingCompleted -> {
                     if (showUpdateDialog) {
