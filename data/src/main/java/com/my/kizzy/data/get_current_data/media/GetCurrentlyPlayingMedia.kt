@@ -52,6 +52,7 @@ class GetCurrentPlayingMedia @Inject constructor(
         var smallIcon: RpcImage? = null
         var smallText: String? = null
         var timestamps: Timestamps? = null
+        val swapConfig = Prefs[Prefs.SWAP, "appname"]
         val mediaSessionManager =
             context.getSystemService(Service.MEDIA_SESSION_SERVICE) as MediaSessionManager
         val sessions = mediaSessionManager.getActiveSessions(componentName)
@@ -67,11 +68,13 @@ class GetCurrentPlayingMedia @Inject constructor(
 
             val metadata = mediaController.metadata
             val title = metadata?.getString(MediaMetadata.METADATA_KEY_TITLE)
-            val appName = if (Prefs[Prefs.MEDIA_RPC_ARTIST_ON_NAME, false]) {
-                metadata?.let { metadataResolver.getArtistOrAuthor(it) }
-                } else {
-                AppUtils.getAppName(mediaController.packageName)
-               } ?: "Unknown App"
+            val appName = when (swapConfig) {
+              "appname" -> AppUtils.getAppName(mediaController.packageName)
+              "songname" -> metadata?.getString(MediaMetadata.METADATA_KEY_TITLE) ?: "Unknown Song"
+              "artistname" -> metadata?.let { metadataResolver.getArtistOrAuthor(it) } ?: "Unknown Artist"
+              "albumname" -> metadata?.let { metadataResolver.getAlbum(it) } ?: "Unknown Album"
+              else -> "Unknown App"
+            }
             val author =
                 if (Prefs[Prefs.MEDIA_RPC_ARTIST_NAME, false])
                 metadata?.let { metadataResolver.getArtistOrAuthor(it) }
