@@ -80,6 +80,8 @@ fun Appearance(
     onBackPressed: () -> Unit, navigateToDarkTheme: () -> Unit
 ) {
 
+var layoutMode by remember { mutableStateOf(Prefs[Prefs.LAYOUT_MODE, false]) }
+
     Scaffold(topBar = {
         LargeTopAppBar(title = {
             Text(
@@ -194,7 +196,6 @@ fun RowScope.ColorButton(
 ) {
     var showDialog by remember { mutableStateOf(false) }
     var customColorValue by remember { mutableStateOf(Prefs[CUSTOM_THEME_COLOR, ""]) }
-    var layoutMode by remember { mutableStateOf(Prefs[Prefs.LAYOUT_MODE, false]) }
     val tonalPalettes =
         if(custom)
             customColorValue.color.toTonalPalettes(tonalStyle)
