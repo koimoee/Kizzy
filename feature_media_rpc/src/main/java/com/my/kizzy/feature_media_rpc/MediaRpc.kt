@@ -53,6 +53,8 @@ import com.my.kizzy.ui.components.BackButton
 import com.my.kizzy.ui.components.SwitchBar
 import com.my.kizzy.ui.components.preference.PreferenceSwitch
 import com.my.kizzy.ui.components.preference.PreferencesHint
+import androidx.compose.material3.AlertDialog
+import com.my.kizzy.ui.components.SettingItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -68,6 +70,12 @@ fun MediaRPC(onBackPressed: () -> Unit) {
     var ShowAlbumArt by remember { mutableStateOf(Prefs[Prefs.MEDIA_RPC_SHOW_ALBUM_ART, false]) }
     var isShowPlaybackState by remember { mutableStateOf(Prefs[Prefs.MEDIA_RPC_SHOW_PLAYBACK_STATE, false]) }
     var hasNotificationAccess by remember { mutableStateOf(context.hasNotificationAccess()) }
+    var swapConfig by remember {
+        mutableStateOf(Prefs[Prefs.SWAP, "appname"])
+    }
+    var showSwapDialog by remember {
+        mutableStateOf(false)
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -133,6 +141,17 @@ fun MediaRPC(onBackPressed: () -> Unit) {
                         Prefs[Prefs.MEDIA_RPC_ARTIST_ON_NAME] = ShowArtistOnName
                     }
                 }
+
+                item {
+                SettingItem(
+                    title = stringResource(id = R.string.swap_name),
+                    description = stringResource(id = R.string.swap_name_desc),
+                    icon = Icons.Default.Sync
+                ) {
+                    showSwapDialog = true
+                   }
+               }
+                
                 item {
                     PreferenceSwitch(
                         title = stringResource(id = R.string.enable_album_name),
@@ -194,6 +213,34 @@ fun MediaRPC(onBackPressed: () -> Unit) {
                     }
                 }
             }
+            if (showSwapDialog) {
+            AlertDialog(
+                onDismissRequest = {
+                    showSwapDialog = false
+                },
+                confirmButton = {},
+                text = {
+                    val statusMap = mapOf(
+                        stringResource(R.string.swap_appname) to "appname",
+                        stringResource(R.string.swap_songname) to "songname",
+                        stringResource(R.string.swap_artistname) to "artistname",
+                        stringResource(R.string.swap_albumname) to "albumname",
+                    )
+                    Column {
+                        statusMap.forEach { (key, value) ->
+                            SingleChoiceItem(
+                                text = key,
+                                selected = value == swapConfig
+                            ) {
+                                websocketConfig = value
+                                Prefs[Prefs.SWAP] = value
+                                showSwapDialog = false
+                            }
+                        }
+                    }
+                }
+            )
+          }
         }
     }
 }
