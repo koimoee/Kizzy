@@ -77,7 +77,14 @@ fun ProfileNetworkError(
                 }
             },
             text = {
-                Text(text = error)
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp, bottom = 16.dp)
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    Text(text = error)
+                }
             }
         )
     }
