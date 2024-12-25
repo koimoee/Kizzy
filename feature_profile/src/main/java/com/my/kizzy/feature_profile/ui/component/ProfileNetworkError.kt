@@ -11,6 +11,9 @@
 
 package com.my.kizzy.feature_profile.ui.component
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.foundation.layout.Arrangement
@@ -52,6 +55,7 @@ fun ProfileNetworkError(
     var showDialog by remember { mutableStateOf(false) }
     val snackbarHostState = remember { SnackbarHostState() }
     val errorMessage = stringResource(R.string.user_profile_error)
+    val context = LocalContext.current
 
     if (showDialog) {
         AlertDialog(
@@ -59,6 +63,16 @@ fun ProfileNetworkError(
             confirmButton = {
                 TextButton(onClick = { showDialog = false }) {
                     Text("OK")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        copyToClipboard(context, error)
+                        showDialog = false
+                    }
+                ) {
+                    Text("Copy")
                 }
             },
             text = {
@@ -70,7 +84,7 @@ fun ProfileNetworkError(
     LaunchedEffect(Unit) {
         snackbarHostState.showSnackbar(
             message = errorMessage,
-            actionLabel = "Details"
+            actionLabel = "View Details"
         ).also { result ->
             if (result == SnackbarResult.ActionPerformed) {
                 showDialog = true
@@ -86,6 +100,12 @@ fun ProfileNetworkError(
                 .padding(16.dp)
         )
     }
+}
+
+fun copyToClipboard(context: Context, text: String) {
+    val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    val clipData = ClipData.newPlainText("Error Details", text)
+    clipboardManager.setPrimaryClip(clipData)
 }
 
 @Preview
