@@ -82,7 +82,7 @@ fun ProfileNetworkError(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 16.dp, bottom = 16.dp)
+                        .padding(top = 10.dp, bottom = 10.dp)
                         .verticalScroll(rememberScrollState())
                 ) {
                     Text(text = error)
@@ -108,6 +108,7 @@ fun ProfileNetworkError(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(16.dp)
+                .padding(vertical = 32.dp)
         )
     }
 }
