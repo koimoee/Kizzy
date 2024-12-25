@@ -50,6 +50,7 @@ fun ProfileNetworkError(
     error: String
 ) {
     var showDialog by remember { mutableStateOf(false) }
+    val snackbarHostState = remember { SnackbarHostState() }
     val errorMessage = stringResource(R.string.user_profile_error)
 
     if (showDialog) {
@@ -66,7 +67,6 @@ fun ProfileNetworkError(
         )
     }
 
-    val snackbarHostState = remember { SnackbarHostState() }
     LaunchedEffect(Unit) {
         snackbarHostState.showSnackbar(
             message = errorMessage,
@@ -78,59 +78,23 @@ fun ProfileNetworkError(
         }
     }
 
-    ElevatedCard(
-        modifier = modifier,
-        colors = CardDefaults.elevatedCardColors(
-            containerColor = Color(0xFFFFDB92)
-        )
-    ) {
-        Box(
+    Box(modifier = modifier.fillMaxSize()) {
+        SnackbarHost(
+            hostState = snackbarHostState,
             modifier = Modifier
-                .fillMaxWidth()
-                .drawWithCache {
-                    onDrawBehind {
-                        drawRect(
-                            color = Color(0xFFFFBC41),
-                            topLeft = Offset.Zero,
-                            size = Size(15f, size.height),
-                        )
-                    }
-                }
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp),
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    Icons.Outlined.Warning,
-                    contentDescription = "networkError",
-                    modifier = Modifier.size(32.dp),
-                    tint = Color(0xFFCE8500)
-                )
-                Text(
-                    text = "$errorMessage\n$error",
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        fontWeight = FontWeight.ExtraBold,
-                        color = Color(0xFFCE8500)
-                    )
-                )
-            }
-        }
+                .align(Alignment.BottomCenter)
+                .padding(16.dp)
+        )
     }
-
-    SnackbarHost(hostState = snackbarHostState)
 }
 
 @Preview
 @Composable
-fun Preview_Profile_Network_Error_Card() {
+fun Preview_Profile_Network_Error() {
     ProfileNetworkError(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp),
+            .fillMaxSize()
+            .padding(16.dp),
         error = "Unable to connect to the network."
     )
 }
