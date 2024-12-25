@@ -61,6 +61,11 @@ fun ProfileNetworkError(
     val context = LocalContext.current
 
     if (showDialog) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(vertical = 32.dp)
+    ) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
             confirmButton = {
@@ -87,7 +92,8 @@ fun ProfileNetworkError(
                 ) {
                     Text(text = error)
                 }
-            }
+            },
+            modifier = Modifier.fillMaxWidth()
         )
     }
 
@@ -108,7 +114,6 @@ fun ProfileNetworkError(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(16.dp)
-                .padding(vertical = 32.dp)
         )
     }
 }
