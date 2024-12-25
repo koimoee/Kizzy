@@ -61,40 +61,41 @@ fun ProfileNetworkError(
     val context = LocalContext.current
 
     if (showDialog) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(vertical = 32.dp)
-    ) {
-        AlertDialog(
-            onDismissRequest = { showDialog = false },
-            confirmButton = {
-                TextButton(onClick = { showDialog = false }) {
-                    Text("OK")
-                }
-            },
-            dismissButton = {
-                TextButton(
-                    onClick = {
-                        copyToClipboard(context, error)
-                        showDialog = false
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(vertical = 25.dp)
+        ) {
+            AlertDialog(
+                onDismissRequest = { showDialog = false },
+                confirmButton = {
+                    TextButton(onClick = { showDialog = false }) {
+                        Text("OK")
                     }
-                ) {
-                    Text("Copy")
-                }
-            },
-            text = {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 10.dp, bottom = 10.dp)
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    Text(text = error)
-                }
-            },
-            modifier = Modifier.fillMaxWidth()
-        )
+                },
+                dismissButton = {
+                    TextButton(
+                        onClick = {
+                            copyToClipboard(context, error)
+                            showDialog = false
+                        }
+                    ) {
+                        Text("Copy")
+                    }
+                },
+                text = {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                            .verticalScroll(rememberScrollState())
+                    ) {
+                        Text(text = error)
+                    }
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
     }
 
     LaunchedEffect(Unit) {
@@ -134,3 +135,4 @@ fun Preview_Profile_Network_Error() {
         error = "Unable to connect to the network."
     )
 }
+
