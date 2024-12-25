@@ -7,18 +7,17 @@
  *  *  * permission of yzziK(Vaibhav)
  *  *  *****************************************************************
  *
- *
  */
 
 package com.my.kizzy.feature_profile.ui.component
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.runtime.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.runtime.*
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Warning
@@ -47,10 +46,11 @@ import com.my.kizzy.resources.R
 
 @Composable
 fun ProfileNetworkError(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     error: String
 ) {
     var showDialog by remember { mutableStateOf(false) }
+    val errorMessage = stringResource(R.string.user_profile_error)
 
     if (showDialog) {
         AlertDialog(
@@ -69,7 +69,7 @@ fun ProfileNetworkError(
     val snackbarHostState = remember { SnackbarHostState() }
     LaunchedEffect(Unit) {
         snackbarHostState.showSnackbar(
-            message = stringResource(R.string.user_profile_error),
+            message = errorMessage,
             actionLabel = "Details"
         ).also { result ->
             if (result == SnackbarResult.ActionPerformed) {
@@ -106,12 +106,12 @@ fun ProfileNetworkError(
             ) {
                 Icon(
                     Icons.Outlined.Warning,
-                    "networkError",
+                    contentDescription = "networkError",
                     modifier = Modifier.size(32.dp),
                     tint = Color(0xFFCE8500)
                 )
                 Text(
-                    text = stringResource(R.string.user_profile_error) + "\n$error",
+                    text = "$errorMessage\n$error",
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.ExtraBold,
                         color = Color(0xFFCE8500)
@@ -131,6 +131,6 @@ fun Preview_Profile_Network_Error_Card() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp),
-        error = stringResource(R.string.user_profile_error)
+        error = "Unable to connect to the network."
     )
 }
