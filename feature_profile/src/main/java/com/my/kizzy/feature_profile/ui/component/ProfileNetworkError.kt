@@ -12,11 +12,13 @@
 
 package com.my.kizzy.feature_profile.ui.component
 
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.*
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Warning
@@ -43,6 +45,34 @@ fun ProfileNetworkError(
     modifier: Modifier,
     error: String
 ) {
+    var showDialog by remember { mutableStateOf(false) }
+
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            confirmButton = {
+                TextButton(onClick = { showDialog = false }) {
+                    Text("OK")
+                }
+            },
+            text = {
+                Text(text = error)
+            }
+        )
+    }
+
+    val snackbarHostState = remember { SnackbarHostState() }
+    LaunchedEffect(Unit) {
+        snackbarHostState.showSnackbar(
+            message = stringResource(R.string.user_profile_error),
+            actionLabel = "Details"
+        ).also { result ->
+            if (result == SnackbarResult.ActionPerformed) {
+                showDialog = true
+            }
+        }
+    }
+
     ElevatedCard(
         modifier = modifier,
         colors = CardDefaults.elevatedCardColors(
@@ -85,6 +115,8 @@ fun ProfileNetworkError(
             }
         }
     }
+
+    SnackbarHost(hostState = snackbarHostState)
 }
 
 @Preview
