@@ -73,15 +73,16 @@ class GamesViewModel @Inject constructor(
     }
 
     fun onUiEvent(uiEvent: UiEvent) {
-        when (uiEvent) {
-            UiEvent.CloseSearchBar -> isSearchBarVisible.value = false
-            UiEvent.OpenSearchBar -> isSearchBarVisible.value = true
-            is UiEvent.Search -> onSearch(uiEvent.query)
-            is UiEvent.SortBy -> onSort(uiEvent.platform)
-            UiEvent.ClearSort -> clearSort()
-            UiEvent.TryAgain -> getGames()
-        }
-    }
+      when (uiEvent) {
+        UiEvent.CloseSearchBar -> isSearchBarVisible.value = false
+        UiEvent.OpenSearchBar -> isSearchBarVisible.value = true
+        is UiEvent.Search -> onSearch(uiEvent.query)
+        is UiEvent.SortBy -> onSort(uiEvent.platform)
+        UiEvent.ClearSort -> clearSort()
+        UiEvent.TryAgain -> getGames()
+      }
+  }
+
 
     private fun onSearch(query: String) {
         currentSearchQuery = query
