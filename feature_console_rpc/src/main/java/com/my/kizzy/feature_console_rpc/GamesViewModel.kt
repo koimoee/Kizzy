@@ -3,7 +3,7 @@
  *  ******************************************************************
  *  *  * Copyright (C) 2022
  *  *  * GamesViewModel.kt is part of Kizzy
- *  *  *  and can not be copied and/or distributed without the express
+ *  *  * and can not be copied and/or distributed without the express
  *  *  * permission of yzziK(Vaibhav)
  *  *  *****************************************************************
  *
@@ -43,6 +43,8 @@ class GamesViewModel @Inject constructor(
     val isSearchBarVisible = mutableStateOf(false)
 
     private var searchJob: Job? = null
+    private var currentSort: String? = null
+    private var currentSearchQuery: String = ""
 
     init {
         getGames()
@@ -53,6 +55,7 @@ class GamesViewModel @Inject constructor(
             when (result) {
                 is Resource.Success -> {
                     _state.value = GamesState.Success(games = result.data ?: emptyList())
+                    games.clear()
                     games.addAll(result.data ?: emptyList())
                 }
 
@@ -74,32 +77,36 @@ class GamesViewModel @Inject constructor(
             UiEvent.CloseSearchBar -> isSearchBarVisible.value = false
             UiEvent.OpenSearchBar -> isSearchBarVisible.value = true
             is UiEvent.Search -> onSearch(uiEvent.query)
+            is UiEvent.SortBy -> onSort(uiEvent.platform)
+            UiEvent.ClearSort -> clearSort()
             UiEvent.TryAgain -> getGames()
         }
     }
 
     private fun onSearch(query: String) {
+        currentSearchQuery = query
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
             delay(500)
-            searchForGame(query)
+            applyFilters()
         }
     }
 
-    private fun searchForGame(query: String) = if (query == "")
-        _state.value = GamesState.Success(games = games)
-    else {
-        val newList = games.filter {
-            it.game_title.contains(query, ignoreCase = true)
+    private fun onSort(platform: String) {
+        currentSort = platform
+        applyFilters()
+    }
+
+    private fun clearSort() {
+        currentSort = null
+        applyFilters()
+    }
+
+    private fun applyFilters() {
+        val filteredGames = games.filter {
+            (currentSort == null || it.platform.equals(currentSort, ignoreCase = true)) &&
+            (currentSearchQuery.isBlank() || it.game_title.contains(currentSearchQuery, ignoreCase = true))
         }
-        _state.value = GamesState.Success(games = newList)
+        _state.value = GamesState.Success(filteredGames)
     }
 }
-
-
-
-
-
-
-
-
