@@ -16,8 +16,8 @@ sealed interface UiEvent {
     object TryAgain: UiEvent
     object CloseSearchBar: UiEvent
     object OpenSearchBar: UiEvent
+    object ClearSort : UiEvent
+    object TryAgain : UiEvent
     class Search(val query: String): UiEvent
-    class SortBy(val platform: String) : UiEvent()
-    object ClearSort : UiEvent()
-    object TryAgain : UiEvent()
+    class SortBy(val platform: String) : UiEvent
 }
