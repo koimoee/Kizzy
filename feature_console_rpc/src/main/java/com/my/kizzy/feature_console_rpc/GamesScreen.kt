@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material3.*
@@ -61,25 +62,24 @@ fun GamesScreen(
     serviceEnabled: Boolean,
     isSearchBarVisible: Boolean
 ) {
-    var selected by remember {
-        mutableStateOf("")
-    }
-
-    val context = LocalContext.current
-    var isConsoleRpcRunning by remember {
-        mutableStateOf(serviceEnabled)
-    }
+    var selected by remember { mutableStateOf("") }
     var searchText by remember { mutableStateOf("") }
-
+    var isConsoleRpcRunning by remember { mutableStateOf(serviceEnabled) }
+    var expanded by remember { mutableStateOf(false) }
+    var sortOption by remember { mutableStateOf<String?>(null) }
+    val sortingOptions = listOf("playstation", "xbox", "wii-u", "nintendo")
+    val context = LocalContext.current
     val intent = Intent(context, CustomRpcService::class.java)
-    Scaffold(Modifier.fillMaxSize(),
+
+    Scaffold(
+        Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
                 title = {
                     if (isSearchBarVisible) {
                         SearchBar(
                             onTextChanged = {
-                                searchText  = it
+                                searchText = it
                                 onEvent(UiEvent.Search(it))
                             },
                             text = searchText,
@@ -88,20 +88,49 @@ fun GamesScreen(
                                 onEvent(UiEvent.CloseSearchBar)
                             }
                         )
-                    }
-                    else {
+                    } else {
                         Text(
                             text = stringResource(id = R.string.main_consoleRpc),
-                            style = MaterialTheme.typography.headlineLarge,
+                            style = MaterialTheme.typography.headlineLarge
                         )
                     }
                 },
                 actions = {
-                        if(!isSearchBarVisible) {
+                    Row {
+                        if (!isSearchBarVisible) {
                             IconButton(onClick = { onEvent(UiEvent.OpenSearchBar) }) {
                                 Icon(Icons.Default.Search, stringResource(id = R.string.search))
                             }
                         }
+                        Box {
+                            IconButton(onClick = { expanded = !expanded }) {
+                                Icon(Icons.Default.MoreVert, contentDescription = "Sort Options")
+                            }
+                            DropdownMenu(
+                                expanded = expanded,
+                                onDismissRequest = { expanded = false }
+                            ) {
+                                DropdownMenuItem(
+                                    onClick = {
+                                        sortOption = null
+                                        expanded = false
+                                        onEvent(UiEvent.ClearSort)
+                                    },
+                                    text = { Text("Clear Sort") }
+                                )
+                                sortingOptions.forEach { option ->
+                                    DropdownMenuItem(
+                                        onClick = {
+                                            sortOption = option
+                                            expanded = false
+                                            onEvent(UiEvent.SortBy(option))
+                                        },
+                                        text = { Text(option) }
+                                    )
+                                }
+                            }
+                        }
+                    }
                 },
                 navigationIcon = { BackButton { onBackPressed() } }
             )
@@ -147,42 +176,22 @@ fun GamesScreen(
                             isChecked = isConsoleRpcRunning
                         ) {
                             isConsoleRpcRunning = !isConsoleRpcRunning
-                            when (isConsoleRpcRunning) {
-                                true -> {
-                                    if (intent.hasExtra("RPC")) {
-                                        Prefs[Prefs.LAST_RUN_CONSOLE_RPC] =
-                                            intent.getStringExtra("RPC")
-                                        context.stopService(
-                                            Intent(
-                                                context,
-                                                AppDetectionService::class.java
-                                            )
-                                        )
-                                        context.stopService(
-                                            Intent(
-                                                context,
-                                                MediaRpcService::class.java
-                                            )
-                                        )
-                                        context.stopService(
-                                            Intent(
-                                                context,
-                                                ExperimentalRpc::class.java
-                                            )
-                                        )
-                                        context.startService(intent)
-                                    }
+                            if (isConsoleRpcRunning) {
+                                if (intent.hasExtra("RPC")) {
+                                    Prefs[Prefs.LAST_RUN_CONSOLE_RPC] = intent.getStringExtra("RPC")
+                                    context.stopService(Intent(context, AppDetectionService::class.java))
+                                    context.stopService(Intent(context, MediaRpcService::class.java))
+                                    context.stopService(Intent(context, ExperimentalRpc::class.java))
+                                    context.startService(intent)
                                 }
-                                false -> context.stopService(
-                                    Intent(
-                                        context,
-                                        CustomRpcService::class.java
-                                    )
-                                )
+                            } else {
+                                context.stopService(Intent(context, CustomRpcService::class.java))
                             }
                         }
                         LazyColumn {
-                            items(state.games) { game ->
+                            items(state.games.filter {
+                                sortOption == null || it.platform == sortOption
+                            }) { game ->
                                 SingleChoiceGameItem(
                                     game = game,
                                     selected = game.game_title == selected
@@ -213,7 +222,6 @@ fun GamesScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SingleChoiceGameItem(
     game: Game,
@@ -227,14 +235,17 @@ fun SingleChoiceGameItem(
             .padding(8.dp)
             .clip(RoundedCornerShape(25.dp))
     ) {
-        Row(modifier = Modifier
-            .padding(8.dp)
-            .fillMaxWidth(),
+        Row(
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            Box(modifier = Modifier
-                .size(80.dp)
-                .clip(RoundedCornerShape(15.dp))){
+            Box(
+                modifier = Modifier
+                    .size(80.dp)
+                    .clip(RoundedCornerShape(15.dp))
+            ) {
                 GlideImage(
                     imageModel = game.large_image,
                     modifier = Modifier
@@ -286,7 +297,7 @@ fun SingleChoiceGameItem(
     }
 }
 
-// <-------------- Previews --------------->
+//Previews
 private val fakeGames = buildList {
     repeat(10) {
         this.add(
@@ -294,7 +305,7 @@ private val fakeGames = buildList {
                 platform = "nintendo",
                 small_image = "",
                 large_image = "",
-                game_title = "Assassin's creed:"
+                game_title = "Assassin's Creed"
             )
         )
     }
