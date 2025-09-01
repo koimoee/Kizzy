@@ -33,11 +33,7 @@ class OAuthRedirectActivity : ComponentActivity() {
 
     private fun handleIntent(intent: Intent) {
         val data: Uri? = intent.data
-        if (data == null) {
-            finish()
-            return
-        }
-        val code = data.getQueryParameter("code")
+        val code = data?.getQueryParameter("code")
         if (code.isNullOrEmpty()) {
             finish()
             return
@@ -47,11 +43,10 @@ class OAuthRedirectActivity : ComponentActivity() {
             val token = exchangeCodeForToken(code)
             if (!token.isNullOrEmpty()) {
                 Prefs[TOKEN] = token
-                getUserInfo(token, onInfoSaved = {
-                    val i = Intent()
-                    setResult(RESULT_OK, i)
+                getUserInfo(token) {
+                    setResult(RESULT_OK, Intent())
                     finish()
-                })
+                }
             } else {
                 finish()
             }
@@ -61,12 +56,13 @@ class OAuthRedirectActivity : ComponentActivity() {
     private suspend fun exchangeCodeForToken(code: String): String? = withContext(Dispatchers.IO) {
         try {
             val url = URL("https://discord.com/api/v10/oauth2/token")
-            val postData = StringBuilder()
-            postData.append("client_id=").append(URLEncoder.encode("1292676584741802125", "UTF-8"))
-            postData.append("&client_secret=").append(URLEncoder.encode("uToL-VesoeSIIcxq4RvUzoe3HA90lNwn", "UTF-8"))
-            postData.append("&grant_type=authorization_code")
-            postData.append("&code=").append(URLEncoder.encode(code, "UTF-8"))
-            postData.append("&redirect_uri=").append(URLEncoder.encode("kizzy://oauth-callback", "UTF-8"))
+            val postData = buildString {
+                append("client_id=").append(URLEncoder.encode("1292676584741802125", "UTF-8"))
+                append("&client_secret=").append(URLEncoder.encode("uToL-VesoeSIIcxq4RvUzoe3HA90lNwn", "UTF-8"))
+                append("&grant_type=authorization_code")
+                append("&code=").append(URLEncoder.encode(code, "UTF-8"))
+                append("&redirect_uri=").append(URLEncoder.encode("https://mutsuki.prplmoe.me/kizzycallback", "UTF-8"))
+            }
 
             val conn = (url.openConnection() as HttpURLConnection).apply {
                 requestMethod = "POST"
@@ -77,21 +73,13 @@ class OAuthRedirectActivity : ComponentActivity() {
             }
 
             OutputStreamWriter(conn.outputStream).use { writer ->
-                writer.write(postData.toString())
+                writer.write(postData)
                 writer.flush()
             }
 
             val responseCode = conn.responseCode
             val stream = if (responseCode in 200..299) conn.inputStream else conn.errorStream
-            val body = BufferedReader(InputStreamReader(stream)).use { br ->
-                val sb = StringBuilder()
-                var line: String? = br.readLine()
-                while (line != null) {
-                    sb.append(line)
-                    line = br.readLine()
-                }
-                sb.toString()
-            }
+            val body = BufferedReader(InputStreamReader(stream)).use { it.readText() }
 
             val json = JSONObject(body)
             return@withContext json.optString("access_token", null)
