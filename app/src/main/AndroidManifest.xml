@@ -60,6 +60,16 @@
                 android:resource="@xml/shortcuts" />
         </activity>
         <activity
+            android:name="com.my.kizzy.feature_profile.ui.auth.OAuthRedirectActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="kizzy" android:host="oauth-callback" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".feature_crash_handler.CrashHandler"
             android:exported="false" />
         <activity
