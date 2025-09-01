@@ -1,25 +1,25 @@
 package com.my.kizzy.feature_profile.ui.auth
 
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
 import com.my.kizzy.feature_profile.getUserInfo
 import com.my.kizzy.preference.Prefs
 import com.my.kizzy.preference.Prefs.TOKEN
-import io.ktor.client.*
-import io.ktor.client.engine.cio.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.http.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.io.OutputStreamWriter
+import java.net.HttpURLConnection
+import java.net.URL
+import java.net.URLEncoder
 
-class OAuthRedirectActivity : Activity() {
-    private val httpClient = HttpClient(CIO)
+class OAuthRedirectActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +38,6 @@ class OAuthRedirectActivity : Activity() {
             return
         }
         val code = data.getQueryParameter("code")
-        val state = data.getQueryParameter("state")
         if (code.isNullOrEmpty()) {
             finish()
             return
@@ -61,20 +60,39 @@ class OAuthRedirectActivity : Activity() {
 
     private suspend fun exchangeCodeForToken(code: String): String? = withContext(Dispatchers.IO) {
         try {
-            val url = "https://discord.com/api/v10/oauth2/token"
-            val params = Parameters.build {
-                append("client_id", "1292676584741802125")
-                // when not using PKCE in a native app, include client_secret
-                append("client_secret", "uToL-VesoeSIIcxq4RvUzoe3HA90lNwn")
-                append("grant_type", "authorization_code")
-                append("code", code)
-                append("redirect_uri", "kizzy://oauth-callback")
+            val url = URL("https://discord.com/api/v10/oauth2/token")
+            val postData = StringBuilder()
+            postData.append("client_id=").append(URLEncoder.encode("1292676584741802125", "UTF-8"))
+            postData.append("&client_secret=").append(URLEncoder.encode("uToL-VesoeSIIcxq4RvUzoe3HA90lNwn", "UTF-8"))
+            postData.append("&grant_type=authorization_code")
+            postData.append("&code=").append(URLEncoder.encode(code, "UTF-8"))
+            postData.append("&redirect_uri=").append(URLEncoder.encode("kizzy://oauth-callback", "UTF-8"))
+
+            val conn = (url.openConnection() as HttpURLConnection).apply {
+                requestMethod = "POST"
+                doOutput = true
+                setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
+                connectTimeout = 15000
+                readTimeout = 15000
             }
-            val response: HttpResponse = httpClient.post(url) {
-                contentType(ContentType.Application.FormUrlEncoded)
-                setBody(params.formUrlEncode())
+
+            OutputStreamWriter(conn.outputStream).use { writer ->
+                writer.write(postData.toString())
+                writer.flush()
             }
-            val body = response.bodyAsText()
+
+            val responseCode = conn.responseCode
+            val stream = if (responseCode in 200..299) conn.inputStream else conn.errorStream
+            val body = BufferedReader(InputStreamReader(stream)).use { br ->
+                val sb = StringBuilder()
+                var line: String? = br.readLine()
+                while (line != null) {
+                    sb.append(line)
+                    line = br.readLine()
+                }
+                sb.toString()
+            }
+
             val json = JSONObject(body)
             return@withContext json.optString("access_token", null)
         } catch (e: Exception) {
