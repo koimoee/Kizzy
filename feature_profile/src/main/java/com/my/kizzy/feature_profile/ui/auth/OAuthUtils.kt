@@ -5,7 +5,7 @@ import java.util.*
 object OAuthUtils {
     private const val CLIENT_ID = "1292676584741802125"
     private const val REDIRECT_URI = "https://mutsuki.prplmoe.me/kizzycallback"
-    private const val SCOPE = "identify rpc.activities.write"
+    private const val SCOPE = "identify"
     private const val DISCORD_AUTHORIZE = "https://discord.com/api/oauth2/authorize"
 
     fun buildAuthorizationUrl(): String {
