@@ -64,6 +64,7 @@ fun LoginScreen(
                 LoginUiState.OnLoginClicked -> {
                     val ctx = LocalContext.current
                     val authUrl = OAuthUtils.buildAuthorizationUrl()
+                    android.util.Log.d("OAuth", "Auth URL: $authUrl")
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(authUrl))
                     ctx.startActivity(intent)
                     uiState = LoginUiState.OnLoginCompleted
