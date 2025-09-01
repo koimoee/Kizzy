@@ -22,8 +22,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.my.kizzy.feature_profile.getUserInfo
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.ui.platform.LocalContext
 import com.my.kizzy.feature_profile.ui.component.DiscordLoginButton
-import com.my.kizzy.feature_profile.ui.component.DiscordLoginWebView
+import com.my.kizzy.feature_profile.ui.auth.OAuthUtils
 import com.my.kizzy.preference.Prefs
 import com.my.kizzy.preference.Prefs.TOKEN
 import com.my.kizzy.ui.components.BackButton
@@ -59,26 +62,11 @@ fun LoginScreen(
             when (uiState) {
                 LoginUiState.InitialState -> {}
                 LoginUiState.OnLoginClicked -> {
-                    ModalBottomSheet(
-                        onDismissRequest = {
-                            uiState = LoginUiState.InitialState
-                        },
-                        sheetState = modalBottomSheetState,
-                        dragHandle = {
-                            BottomSheetDefaults.DragHandle()
-                        },
-                    ) {
-                        DiscordLoginWebView {
-                            Prefs[TOKEN] = it
-                            scope.launch {
-                                modalBottomSheetState.hide()
-                                uiState = LoginUiState.OnLoginCompleted
-                                getUserInfo(it, onInfoSaved = {
-                                    onCompleted()
-                                })
-                            }
-                        }
-                    }
+                    val ctx = LocalContext.current
+                    val authUrl = OAuthUtils.buildAuthorizationUrl()
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(authUrl))
+                    ctx.startActivity(intent)
+                    uiState = LoginUiState.OnLoginCompleted
                 }
                 LoginUiState.OnLoginCompleted -> {
                     buttonEnabledState = false
